@@ -17,24 +17,18 @@ public class TestDriver {
     final public Properties properties;
     final public String runTarget;
 
+    // load properties file and set up Web Driver / Manager, if executing a web UI test suite
+
     public TestDriver() {
         properties = new PropertiesLoader().loadPropertiesFile("runtime.properties");
-        runTarget = getPrioritisedProperty("run_target");
+        runTarget = properties.getProperty("run_target");
         if (runTarget.equalsIgnoreCase("web")) {
             driverManager = DriverManagerFactory.getDriverManager(CHROME);
             driver = driverManager.getWebDriver();
         }
     }
 
-    public String getPrioritisedProperty(String propertyName) {
-        if (System.getenv().containsKey(propertyName)) {
-            return System.getenv(propertyName);
-        } else if (System.getenv().containsKey(propertyName.toUpperCase())) {
-            return System.getenv(propertyName.toUpperCase());
-        } else {
-            return properties.getProperty(propertyName);
-        }
-    }
+    // Quit the Web Driver, if one exists
 
     public void cleanup() {
         if (driverManager != null) {
