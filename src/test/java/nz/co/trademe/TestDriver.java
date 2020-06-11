@@ -3,7 +3,6 @@ package nz.co.trademe;
 import com.valkyrhund.framework.core.DriverManager;
 import com.valkyrhund.framework.core.DriverManagerFactory;
 import com.valkyrhund.framework.core.PropertiesLoader;
-import nz.co.trademe.step_definitions.Hooks;
 
 import org.openqa.selenium.WebDriver;
 
@@ -16,8 +15,8 @@ public class TestDriver {
 
     public static DriverManager driverManager;
     public static WebDriver driver;
-    public Properties properties;
-    public String runTarget;
+    final public Properties properties;
+    final public String runTarget;
 
     public TestDriver() {
         // Load the runtime properties file

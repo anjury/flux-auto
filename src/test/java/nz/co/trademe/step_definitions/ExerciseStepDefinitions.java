@@ -35,7 +35,7 @@ public class ExerciseStepDefinitions {
 
     private final CloseableHttpClient httpClient = HttpClients.createDefault();
 
-    String oAuthHeader = "OAuth " +
+    final String oAuthHeader = "OAuth " +
         "oauth_consumer_key=\"" + Hooks.testDriver.properties.getProperty("oauth_consumer_key") + "\", " +
         "oauth_signature_method=\"PLAINTEXT\", " +
         "oauth_signature=\"" + Hooks.testDriver.properties.getProperty("oauth_consumer_secret") + "%26\"";
@@ -43,7 +43,7 @@ public class ExerciseStepDefinitions {
     String responseString;
     Cars cars;
 
-    String runTarget = Hooks.testDriver.properties.getProperty("run_target");
+    final String runTarget = Hooks.testDriver.properties.getProperty("run_target");
 
     UsedCarsPage usedCarsPage;
 

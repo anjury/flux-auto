@@ -18,7 +18,7 @@ public class Cars {
     @JsonProperty("List")
     public List<Car> carList;
 
-    public Cars() {};
+    public Cars() {}
 
     public String toJson(Object object) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();

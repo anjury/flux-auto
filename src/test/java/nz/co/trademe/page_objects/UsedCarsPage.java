@@ -1,6 +1,5 @@
 package nz.co.trademe.page_objects;
 
-import nz.co.trademe.TestDriver;
 import nz.co.trademe.domain.entities.Subcategory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -12,21 +11,18 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static java.util.concurrent.TimeUnit.SECONDS;
-
 public class UsedCarsPage {
 
-    WebDriver driver;
+    final WebDriver driver;
 
     // locators
 
     private final By locatorCategoryPlaceholder = By.id("CategoryNavigator_CategoryPlaceholder");
 
-    public List<Subcategory> subcategoryList = new ArrayList<Subcategory>();
+    public List<Subcategory> subcategoryList = new ArrayList<>();
 
     public UsedCarsPage(WebDriver driver) {
         this.driver = driver;
