@@ -10,6 +10,7 @@ import org.openqa.selenium.WebDriver;
 import java.util.Properties;
 
 import static io.github.bonigarcia.wdm.config.DriverManagerType.CHROME;
+import static io.github.bonigarcia.wdm.config.DriverManagerType.FIREFOX;
 
 public class TestDriver {
 
@@ -22,10 +23,9 @@ public class TestDriver {
         // Load the runtime properties file
         properties = new PropertiesLoader().loadPropertiesFile("runtime.properties");
         runTarget = getPrioritisedProperty("run_target");
-//        if (Hooks.scenario.getSourceTagNames().contains("@api")) {
-//            runTarget = "api";
-//        }
         if (runTarget.equalsIgnoreCase("web")) {
+            // Testing using the Firefox driver, but not fully implemented yet
+//            driverManager = DriverManagerFactory.getDriverManager(FIREFOX);
             driverManager = DriverManagerFactory.getDriverManager(CHROME);
             driver = driverManager.getWebDriver();
         }

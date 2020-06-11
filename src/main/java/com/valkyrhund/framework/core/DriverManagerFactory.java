@@ -10,14 +10,11 @@ public class DriverManagerFactory {
             case CHROME:
                 driverManager = new ChromeDriverManager();
                 break;
-            // not implemented
-//            case EDGE:
-//                break;
-//            case FIREFOX:
-//                break;
-//            case IE:
-//                break;
+            case FIREFOX:
+                driverManager = new FirefoxDriverManager();
+                break;
             default:
+                System.out.println("No valid Driver Manager specified, defaulting to Chrome.");
                 driverManager = new ChromeDriverManager();
                 break;
         }
