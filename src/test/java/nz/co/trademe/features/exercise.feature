@@ -14,5 +14,5 @@ Feature: Using the TradeMe Sandbox web site write automation code which does the
     | Kia  |
 
   Scenario: Check that the brand ‘Hispano Suiza’ does not exist.
-    When I search for a used car made by "Daihatsu"
+    When I search for a used car made by "Hispano Suiza"
     Then I should see that the make does not exist
