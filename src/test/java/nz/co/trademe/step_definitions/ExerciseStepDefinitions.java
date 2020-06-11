@@ -1,15 +1,13 @@
 package nz.co.trademe.step_definitions;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import cucumber.api.java.en.And;
-import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import nz.co.trademe.TestDriver;
-import nz.co.trademe.domain.entities.Car;
-import nz.co.trademe.domain.entities.Cars;
-import nz.co.trademe.domain.entities.Subcategory;
-import nz.co.trademe.page_objects.UsedCarsPage;
+import nz.co.trademe.entities.Car;
+import nz.co.trademe.entities.Cars;
+import nz.co.trademe.entities.Subcategory;
+import nz.co.trademe.pages.UsedCarsPage;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -49,31 +47,12 @@ public class ExerciseStepDefinitions {
 
     Optional<Subcategory> foundSubcategory;
 
-    @Given("^I want to buy a used car$")
-    public void iWantToBuyAUsedCar() {
-
-        // set up the uri for Used Motors Search
-
-        System.out.println("Run Target: " + runTarget);
-
-        if (runTarget.equals("api")) {
-            System.out.println("API");
-            uri = Hooks.testDriver.properties.getProperty("api_uri") + "Search/Motors/Used.json";
-        }
-
-        if (runTarget.equals("web")) {
-            System.out.println("Web");
-            uri = Hooks.testDriver.properties.getProperty("web_uri") + "?cid=268";
-        }
-
-    }
-
     @When("^I browse the Used Cars category$")
     public void iBrowseTheUsedCarsCategory() throws IOException {
 
         if (runTarget.equals("api")) {
 
-            // execute the GET request for all Used Motors
+            uri = Hooks.testDriver.properties.getProperty("api_uri") + "Search/Motors/Used.json";
 
             getRequest = new HttpGet(uri);
             getRequest.setHeader("Authorization", oAuthHeader);
@@ -92,7 +71,7 @@ public class ExerciseStepDefinitions {
 
         if (runTarget.equals("web")) {
 
-            // just load the web page and create the page object, we do all the work in Then
+            uri = Hooks.testDriver.properties.getProperty("web_uri") + "?cid=268";
 
             TestDriver.driver.get(uri);
 
@@ -103,9 +82,7 @@ public class ExerciseStepDefinitions {
     }
 
     @Then("^I will be able to count how many makes of used cars are available$")
-    public void iWillBeAbleToCountHowManyMakesOfUsedCarsAreAvailable() throws JsonProcessingException {
-
-        // perform the count of distinct Make in response
+    public void iWillBeAbleToCountHowManyMakesOfUsedCarsAreAvailable() {
 
         if (runTarget.equals("api")) {
 
@@ -116,15 +93,11 @@ public class ExerciseStepDefinitions {
 
             System.out.println("Count of different makes available: " + count);
 
-            Assert.assertTrue(true);
-
         }
 
         if (runTarget.equals("web")) {
 
             System.out.println("Count of different makes available: " + usedCarsPage.subcategoryList.size());
-
-            Assert.assertTrue(true);
 
         }
 
@@ -142,7 +115,7 @@ public class ExerciseStepDefinitions {
 
         if (runTarget.equals("api")) {
 
-            // execute the GET request for all Used Motors WHERE Make = Kia
+            uri = Hooks.testDriver.properties.getProperty("api_uri") + "Search/Motors/Used.json";
 
             getRequest = new HttpGet(uri + "?make=" + encodeString(make));
             getRequest.setHeader("Authorization", oAuthHeader);
@@ -161,6 +134,8 @@ public class ExerciseStepDefinitions {
 
         if (runTarget.equals("web")) {
 
+            uri = Hooks.testDriver.properties.getProperty("web_uri") + "?cid=268";
+
             TestDriver.driver.get(uri);
 
             usedCarsPage = new UsedCarsPage(TestDriver.driver);
@@ -169,6 +144,7 @@ public class ExerciseStepDefinitions {
                 .stream()
                 .filter(s -> s.make.equals(make))
                 .findFirst();
+
         }
 
     }
@@ -197,8 +173,6 @@ public class ExerciseStepDefinitions {
     @And("^I will be able to count how many are available$")
     public void iWillBeAbleToCountHowManyAreAvailable() {
 
-        // perform the count of results
-
         if (runTarget.equals("api")) {
             System.out.println("Count of available used cars made by Kia: " + cars.carList.size());
         }
@@ -213,19 +187,15 @@ public class ExerciseStepDefinitions {
 
     }
 
-    @Then("^I should see that none are available$")
-    public void iShouldSeeThatNoneAreAvailable() {
+    @Then("^I should see that the make does not exist$")
+    public void iShouldSeeThatTheMakeDoesNotExist() {
 
         if (runTarget.equals("api")) {
-            Assert.assertEquals("I should see that none are available - ", 0, cars.carList.size());
+            Assert.assertEquals("I should see that the make does not exist - ", 0, cars.carList.size());
         }
 
         if (runTarget.equals("web")) {
-            long count = 0;
-            if (foundSubcategory.isPresent()) {
-                count = foundSubcategory.get().count;
-            }
-            Assert.assertEquals("I should see that none are available - ", 0, count);
+            Assert.assertTrue("I should see that the make does not exist - ", !foundSubcategory.isPresent());
         }
 
     }

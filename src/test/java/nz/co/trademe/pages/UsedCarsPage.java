@@ -1,6 +1,6 @@
-package nz.co.trademe.page_objects;
+package nz.co.trademe.pages;
 
-import nz.co.trademe.domain.entities.Subcategory;
+import nz.co.trademe.entities.Subcategory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -18,9 +18,8 @@ public class UsedCarsPage {
 
     final WebDriver driver;
 
-    // locators
-
     private final By locatorCategoryPlaceholder = By.id("CategoryNavigator_CategoryPlaceholder");
+    private final By locatorSubcategoryList = By.xpath("//*[@id='CategoryNavigator_CategoryPlaceholder']//li");
 
     public List<Subcategory> subcategoryList = new ArrayList<>();
 
@@ -30,22 +29,20 @@ public class UsedCarsPage {
             .withTimeout(Duration.ofSeconds(30))
             .pollingEvery(Duration.ofSeconds(1))
             .ignoring(NoSuchElementException.class);
-        WebElement foo = wait.until(
+        WebElement waitElement = wait.until(
             d -> d.findElement(locatorCategoryPlaceholder));
         populateSubcategoryList();
     }
 
     public void populateSubcategoryList() {
-        List<WebElement> elementList = driver.findElements(By.xpath("//*[@id='CategoryNavigator_CategoryPlaceholder']//li"));
+        List<WebElement> elementList = driver.findElements(locatorSubcategoryList);
         Pattern pattern = Pattern.compile("(\\w+)\\s\\((\\d+)\\)"); // Daihatsu (6)
         for (WebElement webElement : elementList) {
             Matcher matcher = pattern.matcher(webElement.getText());
             if (matcher.find())
             {
-                System.out.println("Make: " + matcher.group(1) + " Count: " + matcher.group(2));
                 subcategoryList.add(new Subcategory(matcher.group(1), Long.parseLong(matcher.group(2))));
             }
-//            System.out.println("Text: " + webElement.getText());
         }
     }
 
